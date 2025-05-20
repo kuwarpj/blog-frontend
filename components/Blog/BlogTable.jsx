@@ -93,12 +93,13 @@ const BlogTable = () => {
   return (
     <>
       <div className="flex justify-end mb-4">
-        <Button  className="cursor-pointer" onClick={openCreateModal}>Create Blog</Button>
+        <Button className="cursor-pointer" onClick={openCreateModal}>
+          Create Blog
+        </Button>
       </div>
 
       <div className="w-full overflow-x-auto">
         <Table className="w-full">
-          <TableCaption>A list of your blog posts.</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[150px]">Image</TableHead>
@@ -196,12 +197,16 @@ const BlogTable = () => {
           <DialogFooter>
             <Button
               variant="outline"
-               className="cursor-pointer"
+              className="cursor-pointer"
               onClick={() => setDeleteDialogOpen(false)}
             >
               Cancel
             </Button>
-            <Button   className="cursor-pointer" variant="destructive" onClick={handleDelete}>
+            <Button
+              className="cursor-pointer"
+              variant="destructive"
+              onClick={handleDelete}
+            >
               Yes, Delete
             </Button>
           </DialogFooter>

@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 const CommentItem = ({ comment, onReplyClick, replyingToId, setReplyingToId, level = 0 }) => (
-  <div className={`pl-${level * 6} border-l-2 border-gray-200 mb-4`}>
+  <div className={`pl-${level * 6}  border-gray-200 mb-4`}>
     <Card>
       <CardContent>
         <div className="flex items-center space-x-2 mb-1">
@@ -124,7 +124,7 @@ const BlogPage = ({ blogId }) => {
         alt={blog.title}
         width={800}
         height={400}
-        className="rounded-md object-cover"
+        className="rounded-md object-cover border"
       />
       <p className="text-gray-700 whitespace-pre-wrap">{blog.description}</p>
 
@@ -138,7 +138,7 @@ const BlogPage = ({ blogId }) => {
         ) : (
           <>
             {comments.length === 0 && (
-              <p className="text-gray-500 mb-4">No comments yet. Be the first!</p>
+              <p className="text-gray-500 mb-4">No comments yet. Be the first..</p>
             )}
 
             {comments.map((comment) => (
