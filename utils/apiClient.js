@@ -1,14 +1,15 @@
 import Cookies from "js-cookie";
 
-export async function apiClient(url, method = "GET", body = null) {
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+export async function apiClient(path, method = "GET", body = null) {
   const token = Cookies.get("authToken");
 
-  console.log("This is token", token)
   const headers = {};
-
   if (body && !(body instanceof FormData)) {
     headers["Content-Type"] = "application/json";
   }
+
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
   }
@@ -23,7 +24,8 @@ export async function apiClient(url, method = "GET", body = null) {
     options.body = body instanceof FormData ? body : JSON.stringify(body);
   }
 
-  const response = await fetch(url, options);
+  const fullUrl = `${BASE_URL}${path}`;
+  const response = await fetch(fullUrl, options);
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));

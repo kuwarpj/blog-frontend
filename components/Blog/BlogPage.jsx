@@ -13,7 +13,7 @@ const BlogDetails = ({ blogId }) => {
   const fetchBlog = async () => {
     try {
       const res = await apiClient(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/blog/${blogId}`
+        `/api/v1/blog/${blogId}`
       );
       setBlog(res?.data);
     } catch (error) {

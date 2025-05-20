@@ -65,8 +65,8 @@ const BlogEditModal = ({ isOpen, onClose, blog, onUpdateSuccess }) => {
 
       const method = isEdit ? "PUT" : "POST";
       const url = isEdit
-        ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/blog/${blog._id}`
-        : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/blog/createblog`;
+        ? `/api/v1/blog/${blog._id}`
+        : `/api/v1/blog/createblog`;
 
       await apiClient(url, method, formData, {
         headers: {

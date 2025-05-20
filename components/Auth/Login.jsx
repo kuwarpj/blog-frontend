@@ -31,7 +31,7 @@ const Login = ({ className, ...props }) => {
 
     try {
       const data = await apiClient(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/login`,
+        `/api/v1/user/login`,
         "POST",
         body
       );

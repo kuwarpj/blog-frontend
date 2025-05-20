@@ -42,7 +42,7 @@ const Signup = ({ className, ...props }) => {
       }
 
       const data = await apiClient(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/register`,
+        `/api/v1/user/register`,
         "POST",
         formData
       );

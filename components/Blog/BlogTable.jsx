@@ -41,7 +41,7 @@ const BlogTable = () => {
   const fetchBlogs = async () => {
     try {
       const res = await apiClient(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/blog/myblogs`
+        `/api/v1/blog/myblogs`
       );
       setBlogs(res?.data || []);
     } catch (error) {
@@ -83,7 +83,7 @@ const BlogTable = () => {
     if (!blogToDelete) return;
     try {
       await apiClient(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/blog/${blogToDelete._id}`,
+        `/api/v1/blog/${blogToDelete._id}`,
         "DELETE"
       );
       toast.success("Blog deleted successfully!");
