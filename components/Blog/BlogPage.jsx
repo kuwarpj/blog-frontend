@@ -12,39 +12,37 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
-function CommentItem({ comment, onReplyClick, replyingToId, setReplyingToId, level = 0 }) {
-  return (
-    <div className={`pl-${level * 6} border-l-2 border-gray-200 mb-4`}>
-      <Card>
-        <CardContent>
-          <div className="flex items-center space-x-2 mb-1">
-            <div className="font-semibold">{comment.author.email}</div>
-          </div>
-          <p className="mb-2 whitespace-pre-wrap">{comment.content}</p>
-          <button
-            onClick={() => setReplyingToId(comment._id)}
-            className="text-sm text-blue-600 hover:underline flex items-center gap-1"
-          >
-            <CornerDownLeft size={16} /> Reply
-          </button>
-         
-          {comment.replies?.map((reply) => (
-            <CommentItem
-              key={reply._id}
-              comment={reply}
-              onReplyClick={onReplyClick}
-              replyingToId={replyingToId}
-              setReplyingToId={setReplyingToId}
-              level={level + 1}
-            />
-          ))}
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
+const CommentItem = ({ comment, onReplyClick, replyingToId, setReplyingToId, level = 0 }) => (
+  <div className={`pl-${level * 6} border-l-2 border-gray-200 mb-4`}>
+    <Card>
+      <CardContent>
+        <div className="flex items-center space-x-2 mb-1">
+          <div className="font-semibold">{comment?.author?.email}</div>
+        </div>
+        <p className="mb-2 whitespace-pre-wrap">{comment?.content}</p>
+        <button
+          onClick={() => setReplyingToId(comment._id)}
+          className="text-sm text-blue-600 hover:underline flex items-center gap-1"
+        >
+          <CornerDownLeft size={16} /> Reply
+        </button>
 
-export default function BlogPage({ blogId }) {
+        {comment.replies?.map((reply) => (
+          <CommentItem
+            key={reply._id}
+            comment={reply}
+            onReplyClick={onReplyClick}
+            replyingToId={replyingToId}
+            setReplyingToId={setReplyingToId}
+            level={level + 1}
+          />
+        ))}
+      </CardContent>
+    </Card>
+  </div>
+);
+
+const BlogPage = ({ blogId }) => {
   const [blog, setBlog] = useState(null);
   const [loadingBlog, setLoadingBlog] = useState(true);
 
@@ -52,10 +50,9 @@ export default function BlogPage({ blogId }) {
   const [loadingComments, setLoadingComments] = useState(true);
 
   const [newComment, setNewComment] = useState("");
-  const [replyingToId, setReplyingToId] = useState(null); 
+  const [replyingToId, setReplyingToId] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
-//function to fetch blogs using blog id
   const fetchBlog = async () => {
     try {
       const res = await apiClient(`/api/v1/blog/${blogId}`);
@@ -67,9 +64,6 @@ export default function BlogPage({ blogId }) {
     }
   };
 
-
-
-  //function to fetch all comments using blog id
   const fetchComments = async () => {
     try {
       const res = await apiClient(`/api/v1/comments/${blogId}`);
@@ -134,7 +128,6 @@ export default function BlogPage({ blogId }) {
       />
       <p className="text-gray-700 whitespace-pre-wrap">{blog.description}</p>
 
-     
       <section className="mt-10">
         <h2 className="text-2xl font-semibold mb-4">Comments</h2>
 
@@ -148,7 +141,6 @@ export default function BlogPage({ blogId }) {
               <p className="text-gray-500 mb-4">No comments yet. Be the first!</p>
             )}
 
-           
             {comments.map((comment) => (
               <CommentItem
                 key={comment._id}
@@ -160,11 +152,11 @@ export default function BlogPage({ blogId }) {
           </>
         )}
 
-       
         <form onSubmit={handleSubmit} className="mt-6 space-y-2">
           {replyingToId && (
             <div className="text-sm text-blue-600 flex items-center gap-2">
-              Replying to comment <button
+              Replying to comment{" "}
+              <button
                 type="button"
                 onClick={() => setReplyingToId(null)}
                 className="underline hover:text-blue-800"
@@ -189,4 +181,6 @@ export default function BlogPage({ blogId }) {
       </section>
     </div>
   );
-}
+};
+
+export default BlogPage;
