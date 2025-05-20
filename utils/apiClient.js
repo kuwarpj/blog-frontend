@@ -1,7 +1,9 @@
 import Cookies from "js-cookie";
 
 export async function apiClient(url, method = "GET", body = null) {
-  const token = Cookies.get("jwtToken");
+  const token = Cookies.get("authToken");
+
+  console.log("This is token", token)
   const headers = {};
 
   if (body && !(body instanceof FormData)) {

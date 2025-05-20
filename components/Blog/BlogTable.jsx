@@ -1,5 +1,6 @@
-'use client'
+"use client";
 
+import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -11,89 +12,168 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-];
+import Image from "next/image";
+import { apiClient } from "@/utils/apiClient";
+import { toast } from "sonner";
+import { format } from "date-fns";
+import BlogEditModal from "./BlodEditModal";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const BlogTable = () => {
+  const [blogs, setBlogs] = useState([]);
+  const [selectedBlog, setSelectedBlog] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [blogToDelete, setBlogToDelete] = useState(null);
+
+  const fetchBlogs = async () => {
+    try {
+      const res = await apiClient(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/blog/myblogs`);
+      setBlogs(res?.data || []);
+    } catch (error) {
+      toast.error(error.message || "Failed to fetch blogs");
+    }
+  };
+
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
+  const openEditModal = (blog) => {
+    setSelectedBlog(blog);
+    setIsEditing(true);
+    setModalOpen(true);
+  };
+
+  const openCreateModal = () => {
+    setSelectedBlog(null);
+    setIsEditing(false);
+    setModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+    setSelectedBlog(null);
+  };
+
+  const handleUpdateSuccess = () => {
+    fetchBlogs();
+  };
+
+  const openDeleteDialog = (blog) => {
+    setBlogToDelete(blog);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDelete = async () => {
+    if (!blogToDelete) return;
+    try {
+      await apiClient(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/blog/${blogToDelete._id}`,
+        "DELETE"
+      );
+      toast.success("Blog deleted successfully!");
+      fetchBlogs();
+      setDeleteDialogOpen(false);
+      setBlogToDelete(null);
+    } catch (error) {
+      toast.error(error.message || "Failed to delete blog");
+    }
+  };
+
   return (
-    <div className="w-full overflow-x-auto">
-      <Table className="w-full">
-        <TableCaption>A list of your recent invoices.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">Invoice</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Method</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
-            <TableHead className="text-center">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {invoices.map((invoice) => (
-            <TableRow key={invoice.invoice}>
-              <TableCell className="font-medium">{invoice.invoice}</TableCell>
-              <TableCell>{invoice.paymentStatus}</TableCell>
-              <TableCell>{invoice.paymentMethod}</TableCell>
-              <TableCell className="text-right">{invoice.totalAmount}</TableCell>
-              <TableCell className="text-center space-x-2">
-                <Button size="sm" variant="outline" onClick={() => console.log("View", invoice)}>View</Button>
-                <Button size="sm" variant="outline" onClick={() => console.log("Edit", invoice)}>Edit</Button>
-                <Button size="sm" variant="destructive" onClick={() => console.log("Delete", invoice)}>Delete</Button>
-              </TableCell>
+    <>
+      <div className="flex justify-end mb-4">
+        <Button onClick={openCreateModal}>Create Blog</Button>
+      </div>
+
+      <div className="w-full overflow-x-auto">
+        <Table className="w-full">
+          <TableCaption>A list of your blog posts.</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[150px]">Image</TableHead>
+              <TableHead>Title</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead>Author</TableHead>
+              <TableHead className="text-right">Created At</TableHead>
+              <TableHead className="text-center">Actions</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={4}>Total</TableCell>
-            <TableCell className="text-right">$2,500.00</TableCell>
-          </TableRow>
-        </TableFooter>
-      </Table>
-    </div>
+          </TableHeader>
+          <TableBody>
+            {blogs.map((blog) => (
+              <TableRow key={blog._id}>
+                <TableCell>
+                  <Image
+                    src={blog.blogImage}
+                    alt={blog.title}
+                    width={100}
+                    height={60}
+                    className="rounded-md object-cover"
+                  />
+                </TableCell>
+                <TableCell className="font-medium">{blog.title}</TableCell>
+                <TableCell>{blog.description}</TableCell>
+                <TableCell>{blog.author?.email}</TableCell>
+                <TableCell className="text-right">
+                  {blog.createdAt ? format(new Date(blog.createdAt), "yyyy-MM-dd") : "-"}
+                </TableCell>
+                <TableCell className="text-center space-x-2">
+                  <Button size="sm" variant="outline" onClick={() => openEditModal(blog)}>
+                    Edit
+                  </Button>
+                  <Button size="sm" variant="destructive" onClick={() => openDeleteDialog(blog)}>
+                    Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell colSpan={5}>Total Blogs</TableCell>
+              <TableCell className="text-center">{blogs.length}</TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </div>
+
+      <BlogEditModal
+        isOpen={modalOpen}
+        onClose={handleModalClose}
+        blog={selectedBlog}
+        isEditing={isEditing}
+        onUpdateSuccess={handleUpdateSuccess}
+      />
+
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this blog? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleDelete}>
+              Yes, Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 

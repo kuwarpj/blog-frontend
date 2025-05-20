@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import { apiClient } from "@/utils/apiClient";
 import { toast } from "sonner"; // Import toast from sonner
+import Cookies from "js-cookie";
 
 const Login = ({ className, ...props }) => {
   const [email, setEmail] = useState("");
@@ -36,6 +37,8 @@ const Login = ({ className, ...props }) => {
       );
 
       if (data?.statusCode === 200) {
+         const token = data.data.token;
+        Cookies.set("authToken", token, { expires: 7, secure: true });
         toast.success("Login successful!");
         router.push("/admin/blogs");
       } else {
