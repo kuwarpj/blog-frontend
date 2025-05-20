@@ -30,15 +30,20 @@ const Login = ({ className, ...props }) => {
     const body = { email, password };
 
     try {
-      const data = await apiClient(
-        `/api/v1/user/login`,
-        "POST",
-        body
-      );
+      const data = await apiClient(`/api/v1/user/login`, "POST", body);
 
       if (data?.statusCode === 200) {
-         const token = data.data.token;
-        Cookies.set("authToken", token, { expires: 7, secure: true });
+        const token = data.data.token;
+        Cookies.set("authToken", token, { expires: 1, secure: true });
+
+        
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            email: data.data.email,
+            profileImage: data.data.profileImage,
+          })
+        );
         toast.success("Login successful!");
         router.push("/admin/blogs");
       } else {

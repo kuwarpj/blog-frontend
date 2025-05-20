@@ -40,9 +40,7 @@ const BlogTable = () => {
 
   const fetchBlogs = async () => {
     try {
-      const res = await apiClient(
-        `/api/v1/blog/myblogs`
-      );
+      const res = await apiClient(`/api/v1/blog/myblogs`);
       setBlogs(res?.data || []);
     } catch (error) {
       toast.error(error.message || "Failed to fetch blogs");
@@ -82,10 +80,7 @@ const BlogTable = () => {
   const handleDelete = async () => {
     if (!blogToDelete) return;
     try {
-      await apiClient(
-        `/api/v1/blog/${blogToDelete._id}`,
-        "DELETE"
-      );
+      await apiClient(`/api/v1/blog/${blogToDelete._id}`, "DELETE");
       toast.success("Blog deleted successfully!");
       fetchBlogs();
       setDeleteDialogOpen(false);
@@ -127,7 +122,9 @@ const BlogTable = () => {
                   />
                 </TableCell>
                 <TableCell className="font-medium">{blog.title}</TableCell>
-                <TableCell className="max-w-xs truncate">{blog.description}</TableCell>
+                <TableCell className="max-w-xs truncate">
+                  {blog.description}
+                </TableCell>
                 <TableCell>{blog.author?.email}</TableCell>
                 <TableCell className="text-right">
                   {blog.createdAt
@@ -136,14 +133,20 @@ const BlogTable = () => {
                 </TableCell>
 
                 <TableCell className="text-center space-x-2">
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => router.push(`/blog/${blog._id}`)}
-                    className="cursor-pointer"
+                  <a
+                    href={`/blog/${blog._id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center"
                   >
-                    <Eye className="h-4 w-4" />
-                  </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="cursor-pointer"
+                    >
+                      <Eye className="h-4 w-4" />
+                    </Button>
+                  </a>
                   <Button
                     size="sm"
                     variant="outline"
