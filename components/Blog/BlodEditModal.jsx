@@ -88,7 +88,7 @@ const BlogEditModal = ({ isOpen, onClose, blog, onUpdateSuccess }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="w-[1000px] max-h-[90vh] ">
         <DialogHeader>
           <DialogTitle>{isEdit ? "Edit Blog" : "Create Blog"}</DialogTitle>
           <DialogDescription>
@@ -97,25 +97,29 @@ const BlogEditModal = ({ isOpen, onClose, blog, onUpdateSuccess }) => {
               : "Fill in the details to create a new blog post."}
           </DialogDescription>
         </DialogHeader>
+
         <div className="space-y-4 py-2">
           <Input
             placeholder="Title"
             value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
-            className="cursor-pointer"
           />
+
           <Textarea
             placeholder="Description"
             value={form.description}
-            onChange={(e) => setForm({ ...form, description: e.target.value })}
-            className="cursor-pointer"
+            onChange={(e) =>
+              setForm({ ...form, description: e.target.value })
+            }
+            className="resize-none min-h-[120px] max-h-[200px] overflow-y-auto"
           />
+
           <Input
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            className="cursor-pointer"
           />
+
           {imagePreview && (
             <img
               src={imagePreview}
@@ -124,19 +128,18 @@ const BlogEditModal = ({ isOpen, onClose, blog, onUpdateSuccess }) => {
             />
           )}
         </div>
+
         <DialogFooter>
           <Button
             variant="outline"
             onClick={onClose}
             disabled={loading}
-            className="cursor-pointer"
           >
             Cancel
           </Button>
           <Button
             onClick={handleSubmit}
             disabled={loading}
-            className="cursor-pointer"
           >
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {isEdit ? "Save Changes" : "Create Blog"}

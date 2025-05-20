@@ -2,7 +2,9 @@
 
 const nextConfig = {
   images: {
-    domains: ['res.cloudinary.com'], // ✅ allow cloudinary images
+    domains: ['res.cloudinary.com'],
   },
 };
+
+
 export default nextConfig;

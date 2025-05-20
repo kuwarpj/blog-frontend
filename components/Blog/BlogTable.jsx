@@ -25,6 +25,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Eye } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const BlogTable = () => {
   const [blogs, setBlogs] = useState([]);
@@ -34,10 +36,13 @@ const BlogTable = () => {
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [blogToDelete, setBlogToDelete] = useState(null);
+  const router = useRouter();
 
   const fetchBlogs = async () => {
     try {
-      const res = await apiClient(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/blog/myblogs`);
+      const res = await apiClient(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/blog/myblogs`
+      );
       setBlogs(res?.data || []);
     } catch (error) {
       toast.error(error.message || "Failed to fetch blogs");
@@ -122,16 +127,35 @@ const BlogTable = () => {
                   />
                 </TableCell>
                 <TableCell className="font-medium">{blog.title}</TableCell>
-                <TableCell>{blog.description}</TableCell>
+                <TableCell className="max-w-xs truncate">{blog.description}</TableCell>
                 <TableCell>{blog.author?.email}</TableCell>
                 <TableCell className="text-right">
-                  {blog.createdAt ? format(new Date(blog.createdAt), "yyyy-MM-dd") : "-"}
+                  {blog.createdAt
+                    ? format(new Date(blog.createdAt), "yyyy-MM-dd")
+                    : "-"}
                 </TableCell>
+
                 <TableCell className="text-center space-x-2">
-                  <Button size="sm" variant="outline" onClick={() => openEditModal(blog)}>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => router.push(`/blog/${blog._id}`)}
+                    className="cursor-pointer"
+                  >
+                    <Eye className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => openEditModal(blog)}
+                  >
                     Edit
                   </Button>
-                  <Button size="sm" variant="destructive" onClick={() => openDeleteDialog(blog)}>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => openDeleteDialog(blog)}
+                  >
                     Delete
                   </Button>
                 </TableCell>
@@ -160,11 +184,15 @@ const BlogTable = () => {
           <DialogHeader>
             <DialogTitle>Confirm Deletion</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this blog? This action cannot be undone.
+              Are you sure you want to delete this blog? This action cannot be
+              undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setDeleteDialogOpen(false)}
+            >
               Cancel
             </Button>
             <Button variant="destructive" onClick={handleDelete}>

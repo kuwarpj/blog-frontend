@@ -1,6 +1,8 @@
-import BlogPage from "@/components/Blog/BlogPage";
+import BlogDetails from "@/components/Blog/BlogPage";
 import React from "react";
 
-export default function page() {
-  <BlogPage />;
+export default function Page({ params }) {
+  const { id } = params;
+
+  return <BlogDetails blogId={id} />;
 }
