@@ -16,7 +16,7 @@ import Image from "next/image";
 import { apiClient } from "@/utils/apiClient";
 import { toast } from "sonner";
 import { format } from "date-fns";
-import BlogEditModal from "./BlodEditModal";
+import BlogEditModal from "./BlogEditModal";
 import {
   Dialog,
   DialogContent,

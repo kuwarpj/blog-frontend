@@ -88,7 +88,7 @@ const BlogEditModal = ({ isOpen, onClose, blog, onUpdateSuccess }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-[1000px] max-h-[90vh] ">
+      <DialogContent className="w-[1000px] max-h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>{isEdit ? "Edit Blog" : "Create Blog"}</DialogTitle>
           <DialogDescription>
@@ -98,7 +98,8 @@ const BlogEditModal = ({ isOpen, onClose, blog, onUpdateSuccess }) => {
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4 py-2">
+        
+        <div className="flex-1 hide-scrollbar overflow-y-auto space-y-4 py-4 pr-2">
           <Input
             placeholder="Title"
             value={form.title}
@@ -111,14 +112,10 @@ const BlogEditModal = ({ isOpen, onClose, blog, onUpdateSuccess }) => {
             onChange={(e) =>
               setForm({ ...form, description: e.target.value })
             }
-            className="resize-none min-h-[120px] max-h-[200px] overflow-y-auto"
+            className="resize-none h-40"
           />
 
-          <Input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-          />
+          <Input type="file" accept="image/*" onChange={handleImageChange} />
 
           {imagePreview && (
             <img
@@ -129,17 +126,18 @@ const BlogEditModal = ({ isOpen, onClose, blog, onUpdateSuccess }) => {
           )}
         </div>
 
-        <DialogFooter>
+      
+        <DialogFooter className="pt-4 border-t mt-4">
           <Button
             variant="outline"
-             className="cursor-pointer"
+            className="cursor-pointer"
             onClick={onClose}
             disabled={loading}
           >
             Cancel
           </Button>
           <Button
-           className="cursor-pointer"
+            className="cursor-pointer"
             onClick={handleSubmit}
             disabled={loading}
           >
