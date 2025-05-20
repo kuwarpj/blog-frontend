@@ -99,7 +99,7 @@ const Signup = ({ className, ...props }) => {
                   onChange={handleFileChange}
                 />
               </div>
-              <Button type="submit" className="w-full" disabled={loading}>
+              <Button type="submit" className="w-full cursor-pointer" disabled={loading}>
                 {loading ? "Signing up..." : "Signup"}
               </Button>
             </div>

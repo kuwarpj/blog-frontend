@@ -132,12 +132,14 @@ const BlogEditModal = ({ isOpen, onClose, blog, onUpdateSuccess }) => {
         <DialogFooter>
           <Button
             variant="outline"
+             className="cursor-pointer"
             onClick={onClose}
             disabled={loading}
           >
             Cancel
           </Button>
           <Button
+           className="cursor-pointer"
             onClick={handleSubmit}
             disabled={loading}
           >

@@ -93,7 +93,7 @@ const BlogTable = () => {
   return (
     <>
       <div className="flex justify-end mb-4">
-        <Button onClick={openCreateModal}>Create Blog</Button>
+        <Button  className="cursor-pointer" onClick={openCreateModal}>Create Blog</Button>
       </div>
 
       <div className="w-full overflow-x-auto">
@@ -132,7 +132,7 @@ const BlogTable = () => {
                     : "-"}
                 </TableCell>
 
-                <TableCell className="text-center space-x-2">
+                <TableCell className="text-center space-x-2 cursor-pointer">
                   <a
                     href={`/blog/${blog._id}`}
                     target="_blank"
@@ -149,6 +149,7 @@ const BlogTable = () => {
                   </a>
                   <Button
                     size="sm"
+                    className="cursor-pointer"
                     variant="outline"
                     onClick={() => openEditModal(blog)}
                   >
@@ -156,6 +157,7 @@ const BlogTable = () => {
                   </Button>
                   <Button
                     size="sm"
+                    className="cursor-pointer"
                     variant="destructive"
                     onClick={() => openDeleteDialog(blog)}
                   >
@@ -194,11 +196,12 @@ const BlogTable = () => {
           <DialogFooter>
             <Button
               variant="outline"
+               className="cursor-pointer"
               onClick={() => setDeleteDialogOpen(false)}
             >
               Cancel
             </Button>
-            <Button variant="destructive" onClick={handleDelete}>
+            <Button   className="cursor-pointer" variant="destructive" onClick={handleDelete}>
               Yes, Delete
             </Button>
           </DialogFooter>
